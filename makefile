@@ -1,4 +1,4 @@
-objects = head tail
+objects = head tail wc true false env
 all: $(objects)
 FLAGS = -Wall -pedantic-errors
 
