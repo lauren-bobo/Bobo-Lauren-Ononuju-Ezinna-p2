@@ -1,17 +1,12 @@
-NAME = lab03
+objects = head tail
+all: $(objects)
 FLAGS = -Wall -pedantic-errors
 
-cl: main.o arrayutil.o
-	gcc -o $(NAME) main.o arrayutil.o
-
-main.o: main.c arrayutil.h
-	gcc -c $(FLAGS) main.c
-
-arrayutil.o: arrayutil.h arrayutil.c
-	gcc -c $(FLAGS) arrayutil.c
+cl: $(objects).c
+	gcc -o $(objects) $(FLAGS) $(objects).c
 
 run: cl
-	./$(NAME)
+	./$(objects)
 
 clean:
-	rm -f $(NAME) *.o
+	rm -f $(objects)
