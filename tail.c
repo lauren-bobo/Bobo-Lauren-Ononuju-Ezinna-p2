@@ -66,17 +66,29 @@ int readFile = 0;
                 readFile = read(file, buffer, BUFFSIZE);
                 if(readFile == -1) perror("read");
                 int lineNum = 0;
+                int k = 0;
                 int j = 0;
+                for ( k ; k < readFile; k++) {
+                    if(buffer[k] == '\n') {
+                        lineNum++;
+                    } //if
+                } //for
+                //printf("\n%d", lineNum);
+                int startPoint = lineNum - n;
+                //printf("\n%d", startPoint);
                 char buffer2[BUFFSIZE];
                 //read for new line characters and initialize everything up
                 //to there into buff2 to be read
-                for( j;  j < readFile && lineNum < n; j++) {
-                    buffer2[j] = buffer[j];
-                    //check for new line characters
-                    if(buffer[j] == '\n') {
-                        lineNum++;
-                        //printf("%d", lineNum);
+                lineNum = 0;
+                for( j; j < readFile; j++) {
+                    if (lineNum >= startPoint) {
+                        buffer2[j] = buffer[j];
                     } //if
+
+                    if (buffer[j] == '\n') {
+                        lineNum++;
+                        }//if
+
                 } //for j
                 //write only buffer2 with the specified number of lines
                 write(STDOUT_FILENO, buffer2, readFile);
