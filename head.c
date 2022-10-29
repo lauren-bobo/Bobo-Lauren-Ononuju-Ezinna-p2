@@ -62,13 +62,17 @@ int main(int argc, char* argv[]) {
                 int lineNum = 0;
                 int j = 0;
                 char buffer2[BUFFSIZE];
+                //read for new line characters and initialize everything up
+                //to there into buff2 to be read
                 for( j;  j < readFile && lineNum < n; j++) {
                     buffer2[j] = buffer[j];
+                    //check for new line characters
                     if(buffer[j] == '\n') {
                         lineNum++;
                         //printf("%d", lineNum);
                     } //if
                 } //for j
+                //write only buffer2 with the specified number of lines
                 write(STDOUT_FILENO, buffer2, readFile);
             } //for
 
