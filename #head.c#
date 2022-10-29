@@ -3,39 +3,45 @@
 #include <unistd.h>
 
 #define BUFFSIZE 16
-
-int main(int argc, char* argv[]){
+int main(int argc, char* argv[]) {
+    int count;
+    for( count = 0; count < argc; count++ )
+        printf( "  argv[%d]   %s\n", count, argv[count] );
     int readFile;
-    char buffer[BUFFSIZE];
-    int c,n;
+     char buffer[BUFFSIZE];
+     int c,n;
+     int indexOfFileStart = 1;
 
-    //parse 
-    //no arguments provided
-    if(argc == 1) {
-        //read standard input until EOF signal is recieved
-        while((readFile = read(STDIN_FILENO, buffer, BUFFSIZE)) > 0) {
-            //write standard input to console
-            write(STDOUT_FILENO, buffer, readFile);
-        } //while
-    } //if
+     if(*specifier[1] ) {
+         char charC = *argv[2];
+         c = (double)charC;
+         indexOfFileStart = 3;
+          printf("%c", charC);
+     } else if( *specifier[1] == 'n') {
+         char charN = *argv[2];
+         n = (double)charN;
+         indexOfFileStart = 3;
+          printf("%c", charN);
+     } else {
+         n = 10;
+             } //if
 
-    //if any arguments are provided (i starts at 1)
-    for (int i = 1; i < argc; i++) {
-        char * fileName = argv[i];
+     int i = indexOfFileStart;
+     //if any arguments are provided (i starts at 1)
+     for( i ; i < argc; i++) {
+         char * fileName = argv[i];
         int file = open(fileName, O_RDONLY);
+        if (file == -1) perror("open");
         //if '-' provided as file name
         if(*fileName == '-') {
-            //read from standard input until EOF recieved
-            while((readFile = read(STDIN_FILENO, buffer, BUFFSIZE)) > 0) {
-                //write standard input to standard output
-                write(STDOUT_FILENO, buffer, readFile);
-            } //while
+
         //any other valid file name
-        } else {
+       } else {
             //read from file at argv[i] and print it to standard output
             while((readFile = read(file, buffer, BUFFSIZE)) > 0) {
                 write(STDOUT_FILENO, buffer, readFile);
             } //while
+            if(readFile == -1) perror("read");
         } // if
-    } //for
-} //main
+     } //for
+ } //main
