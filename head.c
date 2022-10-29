@@ -24,19 +24,25 @@ int main(int argc, char* argv[]) {
             BUFFSIZE = (int*)malloc(c);
         } //if
     } //while
-    //printf("c = %d n = %d", c, n);
+
+    //print number of bytes
     if (c > 0) {
-    int i = indexOfFileStart;
-    for( i ; i < argc; i++) {
-        char * fileName = argv[i];
-        int file = open(fileName, O_RDONLY);
-        char buffer[c];
-        if (file == -1) perror("open");
+        //start after command line arguments
+        int i = indexOfFileStart;
+        for( i ; i < argc; i++) {
+            char * fileName = argv[i];
+            int file = open(fileName, O_RDONLY);
+            char buffer[c];
+            if (file == -1) perror("open");
         //read from file at argv[i] and print to std output
-        readFile = read(file, buffer, c);
-        //printf("readfile = %d", readFile);
-        write(STDOUT_FILENO, buffer, readFile);
-        if(readFile == -1) perror("read");
-    } //for
-    } //if
+            readFile = read(file, buffer, c);
+            //printf("readfile = %d", readFile);
+            write(STDOUT_FILENO, buffer, readFile);
+            if(readFile == -1) perror("read");
+        } //for
+    } //if c
+        // print num lines
+        if (n > 0) {
+
+        } //if n
 } //main
