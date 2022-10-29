@@ -9,50 +9,50 @@
 #define BUFFSIZE 514
 int main(int argc, char* argv[]) {
     int opt;
-    int c, w, l;
+    int c = false, w = false, l = false;
     int indexOfFileNameStart = 1;
     //parse input
     /* needs to be fixxed to better parse file names*/
-    while((opt = getopt(argc,argv, ":clw")) != -1) {
+    while((opt = getopt(argc,argv, "+clw")) != -1) {
         switch (opt) {
-        case 'c': {
+        case 'c':
             c = true;
             break;
-        } //if
-        case 'l':{
+        case 'l':
             l = true;
             break;
-        } //if
-        case 'w': {
+        case 'w':
             w = true;
             break;
-        } //if
-        case '?': {
-            break;
-        }
         } //switch
     } //while
     // printf("%ld", sizeof(fileNames));
-    int j = 0;
-
-    int totalC, totalL, totalW, i = 0;
+    printf("\n");
+    int totalC = 0, totalL = 0, totalW = 0, i = 0, printTotals= false;
     for ( i ; optind  < argc ; optind++,  i++) {
-        printf("\n");
+        //printf("%s", argv[optind]);
+        if (i >= 1) {
+            printTotals = true;
+        } //if
         char * fileName = argv[optind];
         //standard input
         if (*fileName == '-') {
             printf("standard input is not implemented yet :(");
         } //if
+
         int file = open(fileName, O_RDONLY);
         if (file == -1) perror("open");
         char buffer[BUFFSIZE];
+
         int readFile = read(file, buffer, BUFFSIZE);
         //print c specified
+
         if (c) {
         off_t size = lseek(file, 0, SEEK_END);
         printf("%ld ", size);
         //some condition to only add to total if more than 1 file name
         totalC += size;
+
         } //if c
         //print l if specified
         if (l) {
@@ -63,22 +63,34 @@ int main(int argc, char* argv[]) {
                 } //if
             } //for
             printf("%d ", lineNum);
-
             totalL += lineNum;
         } //if l
         //print w if specified
         if (w) {
             int k = 0, wordNum = 0;
             for ( k ; k < readFile; k++) {
-                if(buffer[k] == ' ') {
+                if(buffer[k] == ' ' || buffer[k] == '\n' ) {
                     wordNum++;
                 } //if
             } //for
             printf("%d ", wordNum);
 
             totalW += wordNum;
+
         } //if w
-        printf("%s", fileName);
+        printf("%s\n", fileName);
     } //for
-    //print totals
+
+    if (printTotals) {
+        if(c) {
+            printf("%d ", totalC) ;
+        } //if c
+        if(l) {
+            printf("%d ", totalL);
+        } //if l
+        if(w) {
+            printf("%d ", totalW);
+        } // if
+        printf("total\n");
+    } //if
 } //main
