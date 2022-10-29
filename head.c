@@ -58,17 +58,18 @@ int main(int argc, char* argv[]) {
                 if (file == -1) perror("open");
                 //read file and print it until lines exceed n
                 readFile = read(file, buffer, BUFFSIZE);
+                if(readFile == -1) perror("read");
                 int lineNum = 0;
                 int j = 0;
+                char buffer2[BUFFSIZE];
                 for( j;  j < readFile && lineNum < n; j++) {
+                    buffer2[j] = buffer[j];
                     if(buffer[j] == '\n') {
                         lineNum++;
-                        printf("%d", lineNum);
-                        write(STDOUT_FILENO, buffer, readFile);
+                        //printf("%d", lineNum);
                     } //if
-                }
-                              // } //for
-                if(readFile == -1) perror("read");
+                } //for j
+                write(STDOUT_FILENO, buffer2, readFile);
             } //for
 
         } //if n
