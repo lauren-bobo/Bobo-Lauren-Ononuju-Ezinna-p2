@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#define BUFFSIZE 16
+
+int main(int argc, char* argv[]){
+    int readFile;
+    char buffer[BUFFSIZE];
+    int c,n;
+
+    //parse 
+    //no arguments provided
+    if(argc == 1) {
+        //read standard input until EOF signal is recieved
+        while((readFile = read(STDIN_FILENO, buffer, BUFFSIZE)) > 0) {
+            //write standard input to console
+            write(STDOUT_FILENO, buffer, readFile);
+        } //while
+    } //if
+
+    //if any arguments are provided (i starts at 1)
+    for (int i = 1; i < argc; i++) {
+        char * fileName = argv[i];
+        int file = open(fileName, O_RDONLY);
+        //if '-' provided as file name
+        if(*fileName == '-') {
+            //read from standard input until EOF recieved
+            while((readFile = read(STDIN_FILENO, buffer, BUFFSIZE)) > 0) {
+                //write standard input to standard output
+                write(STDOUT_FILENO, buffer, readFile);
+            } //while
+        //any other valid file name
+        } else {
+            //read from file at argv[i] and print it to standard output
+            while((readFile = read(file, buffer, BUFFSIZE)) > 0) {
+                write(STDOUT_FILENO, buffer, readFile);
+            } //while
+        } // if
+    } //for
+} //main
