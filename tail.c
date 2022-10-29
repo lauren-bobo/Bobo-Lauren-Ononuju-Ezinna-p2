@@ -68,15 +68,18 @@ int readFile = 0;
                 int lineNum = 0;
                 int k = 0;
                 int j = 0;
+                //count total number of lines in file
                 for ( k ; k < readFile; k++) {
                     if(buffer[k] == '\n') {
                         lineNum++;
                     } //if
                 } //for
-                //printf("\n%d", lineNum);
+                //start the translation at the end line minus the number of
+                //lines to print
                 int startPoint = lineNum - n;
-                //printf("\n%d", startPoint);
+                //make a copy to transfer lines to write
                 char buffer2[BUFFSIZE];
+
                 //read for new line characters and initialize everything up
                 //to there into buff2 to be read
                 lineNum = 0;
