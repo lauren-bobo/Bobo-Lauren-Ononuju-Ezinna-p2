@@ -9,18 +9,22 @@
 #define BUFFSIZE 514
 int main(int argc, char* argv[]) {
     int readFile = 0;
-    int c,n = 10;
+    int c = 0,n = 10;
     int indexOfFileStart = 1;
     int opt;
-    while((opt = getopt(argc,argv, ":n:c:")) != -1) {
+    //opt parses arguments,
+    while((opt = getopt(argc,argv, ":n::c:")) != -1) {
         switch(opt) {
         case 'n': {
+            /*FIX (should only = optarg if optarg is present)*/
             n = atoi(optarg);
             indexOfFileStart = 3;
             break;
         } //case n
         case 'c': {
             c = atoi(optarg);
+            /*FIX*/
+            if (c == 0) perror("invalid number of bytes");
             indexOfFileStart = 3;
             n = 0;
             break;
