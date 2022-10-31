@@ -1,0 +1,5 @@
+1) ./head and ./tail need to return an error message if no argument is given for -c
+2) ./wc needs to count words better
+3) evc needs to be implemented
+4) stdin needs to be added to all functions
+5) need to parse filenames in ./head and ./tail similarly to how i did in ./wc (ie remove reliance on indexOfStart and instead cycle through optind)
