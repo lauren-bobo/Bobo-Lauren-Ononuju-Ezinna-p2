@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <getopt.h>
+#include <errno.h>
 
 #define true 1
 #define false 0
@@ -10,31 +11,47 @@
 int main(int argc, char* argv[]) {
     int readFile = 0;
     int c = 0,n = 10;
+    int byteNum = false, int lineNum = true;
     int indexOfFileStart = 1;
     int opt;
     //opt parses arguments,
-    while((opt = getopt(argc,argv, ":n::c:")) != -1) {
+    while((opt = getopt(argc,argv, "n:c:")) != -1) {
         switch(opt) {
         case 'n': {
             /*FIX (should only = optarg if optarg is present)*/
+            lineNum = true;
             n = atoi(optarg);
+            if (n == 0) {
+                errno;
+                perror(argv[0]);
+            } //if
             indexOfFileStart = 3;
             break;
         } //case n
         case 'c': {
+            byeNum = true;
+            lineNum = false;
             c = atoi(optarg);
             /*FIX*/
-            if (c == 0) perror("invalid number of bytes");
-            indexOfFileStart = 3;
-            n = 0;
-            break;
+            if (c == 0){
+                errno = EIEIO;
+                perror(argv[0]);
+            } //if
+            case ':' {
+                if (lineNum) {
+                    //error msg
+                }
+                if (byteNum) {
+                    //error msg
+                }
+            } //if
         } //case c
         } //switch
     } //while
     //set variables for file read
     int i = indexOfFileStart;
     //print number of bytes
-    if (c > 0) {
+    if (byteNum) {
         //start after command line arguments
         //loop through all provided file names
         for( i ; i < argc; i++) {
@@ -53,7 +70,7 @@ int main(int argc, char* argv[]) {
 
 
     // print num lines
-        if (n > 0) {
+        if (lineNum) {
             int i = indexOfFileStart;
             for( i ; i < argc; i++) {
                 char * fileName = argv[i];
