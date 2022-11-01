@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
             } //if
             break;
         }
-            //not throwing error if file name present
+            //not throwing error if argument not present
         case ':': {
             if (lineNum) {
                 errno = EINVAL;
@@ -60,6 +60,8 @@ int main(int argc, char* argv[]) {
         } // ':'
         } //switch
     } //while
+        /* temporary */
+
     int i = 0;
     //print number of bytes
     if (byteNum) {
@@ -67,10 +69,12 @@ int main(int argc, char* argv[]) {
         //loop through all provided file names
         for( i ; optind  < argc; optind++,  i++) {
             char * fileName = argv[optind];
+            if (*fileName == '-') {
+            } //if
             int file = open(fileName, O_RDONLY);
+            if (file == -1) perror("open");
             //set buffer to size c
             char buffer[c];
-            if (file == -1) perror("open");
         //read from file at argv[i] for only c bytes and print to std output
             readFile = read(file, buffer, c);
             //printf("readfile = %d", readFile);
@@ -83,24 +87,31 @@ int main(int argc, char* argv[]) {
     // print num lines
     if (lineNum) {
         for( i ; optind < argc; optind++, i++) {
-                char * fileName = argv[optind];
-                int file = open(fileName, O_RDONLY);
-                char buffer[BUFFSIZE];
+            //cycle through leftover arguments from optind to ensure not reading -n or -c as files
+            char * fileName = argv[optind];
+            if (*fileName == '-') {
+                int * nP;
+                *nP = n;
+                linesStdIn(nP);
+            }
+            int file = open(fileName, O_RDONLY);
                 if (file == -1) perror("open");
+                //stores original read file
+                char buffer[BUFFSIZE];
                 //read file and print it until lines exceed n
                 readFile = read(file, buffer, BUFFSIZE);
                 if(readFile == -1) perror("read");
-                int lineNum = 0;
-                int j = 0;
+                int lineNum = 0, j = 0;
+                //stores only bytes we want written
                 char buffer2[BUFFSIZE];
                 //read for new line characters and initialize everything up
-                //to there into buff2 to be read
+                //to there into buff2 to be written
                 for( j;  j < readFile && lineNum < n; j++) {
+                    //copies buff 2 until line limit reached
                     buffer2[j] = buffer[j];
                     //check for new line characters
                     if(buffer[j] == '\n') {
                         lineNum++;
-                        //printf("%d", lineNum);
                     } //if
                 } //for j
                 //write only buffer2 with the specified number of lines
@@ -108,4 +119,29 @@ int main(int argc, char* argv[]) {
             } //for
 
         } //if n
-} //main
+} // main
+
+void linesStdIn(int * nP)  {
+    int n = *nP;
+        int linesPrinted = 0, readFile = 0;
+        char buffer[BUFFSIZE];
+        char buffer2[BUFFSIZE];
+        while(linesPrinted < n) {
+            readFile = read(STDIN_FILENO, buffer, BUFFSIZE);
+            int i = 0, lineCount = 0;
+            for( i = 0; i < BUFFSIZE; i++) {
+                //read lines from each standard input
+                if(buffer[i] = '\n') {
+                    lineCount++;
+                } //if
+                if(lineCount < n) {
+                    buffer[i] = buffer2[i];
+                } //if
+                linesPrinted += lineCount;
+            } //for
+            write(STDOUT_FILENO, buffer, readFile);
+         } //while
+     } //linesStdIn
+
+     void bytesStdIn() {
+     } //bytesStdIn
