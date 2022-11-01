@@ -11,51 +11,60 @@
 int main(int argc, char* argv[]) {
     int readFile = 0;
     int c = 0,n = 10;
-    int byteNum = false, int lineNum = true;
-    int indexOfFileStart = 1;
+    int byteNum = false,  lineNum = true;
     int opt;
     //opt parses arguments,
-    while((opt = getopt(argc,argv, "n:c:")) != -1) {
+    while((opt = getopt(argc,argv, ":n:c:")) != -1) {
         switch(opt) {
         case 'n': {
-            /*FIX (should only = optarg if optarg is present)*/
             lineNum = true;
-            n = atoi(optarg);
-            if (n == 0) {
-                errno;
+            printf("\n\n%ls", optarg);
+            //ensure non-negative input
+            if (!(atoi(optarg)>0)) {
+                errno = EINVAL;
                 perror(argv[0]);
+            } else if (!(isdidgit(atoi(optarg)))) {
+                fprintf(stderr, "invalid number of lines");
+            }
+                else {
+                n = atoi(optarg);
             } //if
-            indexOfFileStart = 3;
             break;
         } //case n
         case 'c': {
-            byeNum = true;
+            byteNum = true;
             lineNum = false;
-            c = atoi(optarg);
-            /*FIX*/
-            if (c == 0){
-                errno = EIEIO;
+
+            //ensure valid input
+            if (!(atoi(optarg)>0)) {
+                errno = EINVAL;
                 perror(argv[0]);
+            } else {
+                c = atoi(optarg);
             } //if
-            case ':' {
-                if (lineNum) {
-                    //error msg
-                }
-                if (byteNum) {
-                    //error msg
-                }
-            } //if
-        } //case c
+            break;
+        } //c
+
+            //not throwing error if file name present
+        case ':': {
+            if (lineNum) {
+                errno = EINVAL;
+                perror(argv[0]);
+            } // lineNum
+            if (byteNum) {
+                //error msg
+            }
+                break;
+        } // ':'
         } //switch
     } //while
-    //set variables for file read
-    int i = indexOfFileStart;
+    int i = 0;
     //print number of bytes
     if (byteNum) {
         //start after command line arguments
         //loop through all provided file names
-        for( i ; i < argc; i++) {
-            char * fileName = argv[i];
+        for( i ; optind  < argc; optind++,  i++) {
+            char * fileName = argv[optind];
             int file = open(fileName, O_RDONLY);
             //set buffer to size c
             char buffer[c];
@@ -70,10 +79,9 @@ int main(int argc, char* argv[]) {
 
 
     // print num lines
-        if (lineNum) {
-            int i = indexOfFileStart;
-            for( i ; i < argc; i++) {
-                char * fileName = argv[i];
+    if (lineNum) {
+        for( i ; optind < argc; optind++, i++) {
+                char * fileName = argv[optind];
                 int file = open(fileName, O_RDONLY);
                 char buffer[BUFFSIZE];
                 if (file == -1) perror("open");
