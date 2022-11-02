@@ -5,7 +5,7 @@
 #include <getopt.h>
 #include<errno.h>
 
-#define BUFFSIZE 514
+#define BUFFSIZE 1048576
 #define true 1
 #define false 0
 
