@@ -26,6 +26,11 @@ int main(int argc, char* argv[]) {
             break;
         } //switch
     } //while
+    if (c == false && w == false && l == false) {
+        c = true;
+        w = true;
+        l = true;
+    } //if
     // printf("%ld", sizeof(fileNames));
     printf("\n");
     int totalC = 0, totalL = 0, totalW = 0, i = 0, printTotals= false;
@@ -36,14 +41,15 @@ int main(int argc, char* argv[]) {
         } //if
         int file;
         char * fileName = argv[optind];
+
         //standard input
         if (*fileName == '-') {
-            int file = STDIN_FILENO;
+            file = STDIN_FILENO;
             //printf("standard input is not implemented yet :(");
         } else {
-            int file = open(fileName, O_RDONLY);
+             file = open(fileName, O_RDONLY);
 
-        } // if
+        } //// if
 
         if (file == -1) perror("open");
         char buffer[BUFFSIZE];
@@ -55,7 +61,7 @@ int main(int argc, char* argv[]) {
             off_t size = lseek(file, 0, SEEK_END);
             printf("%ld ", size);
             //some condition to only add to total if more than 1 file name
-            totalC += size;
+            totalC = totalC + size;
         } //if c
 
         //print l (number of newlines) if specified
@@ -67,7 +73,7 @@ int main(int argc, char* argv[]) {
                 } //if
             } //for
             printf("%d ", lineNum);
-            totalL += lineNum;
+            totalL = totalL + lineNum;
         } //if l
 
         //print w (number of words) if specified
@@ -85,7 +91,7 @@ int main(int argc, char* argv[]) {
             } //for
             printf("%d ", wordNum);
 
-            totalW += wordNum;
+            totalW = totalW + wordNum;
 
         } //if w
         printf("%s\n", fileName);
