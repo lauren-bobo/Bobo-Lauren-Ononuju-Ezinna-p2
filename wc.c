@@ -98,15 +98,15 @@ int main(int argc, char* argv[]) {
     } //for
 
     if (printTotals) {
-        if(c) {
-            printf("%d ", totalC) ;
-        } //if c
         if(l) {
             printf("%d ", totalL);
         } //if l
-        if(w) {
+         if(w) {
             printf("%d ", totalW);
         } // if
+        if(c) {
+            printf("%d ", totalC) ;
+        } //if c
         printf("total\n");
     } //if
 } //main
