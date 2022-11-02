@@ -111,19 +111,23 @@ int main(int argc, char* argv[]) {
         for( i ; optind < argc; optind++, i++) {
             //cycle through leftover arguments from optind to ensure not reading -n or -c as files
             char * fileName = argv[optind];
+
             if (*fileName == '-') {
-                int linesToPrint = 0, m = 0;
-                char buffer[BUFFSIZE];
-                char buffer2[BUFFSIZE];
-                while (linesToPrint < n) {
+                int linesPrinted = 0;
+
+                while (linesPrinted < n) {
+                    char buffer[BUFFSIZE];
+                    char buffer2[BUFFSIZE];
+
+                    int m = 0;
                     readFile = read(STDIN_FILENO, buffer, BUFFSIZE);
-                    for (m; m < BUFFSIZE, linesToPrint < n; m++) {
+                    for (m; m < BUFFSIZE && linesPrinted < n ; m++) {
                         buffer2[m] = buffer[m];
-                        if(buffer[m] == '\n'|| readFile == 0) linesToPrint++;
+                        if(buffer[m] == '\n') linesPrinted++;
                     } //for
                     write(STDOUT_FILENO, buffer2, BUFFSIZE);
-                } //while
 
+                } //while
 
             } else {
             int file = open(fileName, O_RDONLY);
