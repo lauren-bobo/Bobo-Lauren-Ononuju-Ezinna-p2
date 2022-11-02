@@ -38,10 +38,10 @@ int main(int argc, char* argv[]) {
         char * fileName = argv[optind];
         //standard input
         if (*fileName == '-') {
-            int file = STDIN_FILENO;
+            file = STDIN_FILENO;
             //printf("standard input is not implemented yet :(");
         } else {
-            int file = open(fileName, O_RDONLY);
+            file = open(fileName, O_RDONLY);
 
         } // if
 
