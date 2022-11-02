@@ -31,14 +31,13 @@ int main(int argc, char* argv[]) {
         w = true;
         l = true;
     } //if
-    // printf("%ld", sizeof(fileNames));
+
     printf("\n");
     int totalC = 0, totalL = 0, totalW = 0, i = 0, printTotals= false;
 
 
     for ( i ; optind  < argc ; optind++,  i++) {
         int file;
-        //printf("%s", argv[optind]);
         if (i >= 1) {
             printTotals = true;
         } //if
@@ -48,7 +47,7 @@ int main(int argc, char* argv[]) {
         //standard input
         if (*fileName == '-') {
             file = STDIN_FILENO;
-            //printf("standard input is not implemented yet :(");
+
         } else {
              file = open(fileName, O_RDONLY);
 
