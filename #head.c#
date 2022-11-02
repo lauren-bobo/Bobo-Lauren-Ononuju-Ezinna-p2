@@ -19,7 +19,6 @@ void linesStdIn(int * nP)  {
         write(STDOUT_FILENO, buffer, readFile);
     } //while
 
-
      } //linesStdIn
 
      void bytesStdIn() {
