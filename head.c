@@ -70,11 +70,12 @@ int main(int argc, char* argv[]) {
 
         //stdin case no args
         if (optind == argc) {
-            char buffer[BUFFSIZE];
-            while (readFile = read(STDIN_FILENO, buffer, BUFFSIZE) > 0 )
-            {
-                write(1, buffer,c);
-            }
+            char buffer[c];
+            int bytesPrinted = 0;
+            while ( bytesPrinted < c) {
+                bytesPrinted +=  read(STDIN_FILENO, buffer, c);
+                } //while
+            write(STDOUT_FILENO, buffer, c);
 
         } //if
         //start after command line arguments
@@ -87,7 +88,7 @@ int main(int argc, char* argv[]) {
                 char buffer[c];
                 int bytesPrinted = 0;
                 while ( bytesPrinted < c) {
-                    bytesPrinted +=  read(STDIN_FILENO, buffer, BUFFSIZE);
+                    bytesPrinted +=  read(STDIN_FILENO, buffer, c);
                 } //while
                     write(STDOUT_FILENO, buffer, c);
 
@@ -111,6 +112,18 @@ int main(int argc, char* argv[]) {
             //cycle through leftover arguments from optind to ensure not reading -n or -c as files
             char * fileName = argv[optind];
             if (*fileName == '-') {
+                int linesToPrint = 0, m = 0;
+                char buffer[BUFFSIZE];
+                char buffer2[BUFFSIZE];
+                while (linesToPrint < n) {
+                    readFile = read(STDIN_FILENO, buffer, BUFFSIZE);
+                    for (m; m < BUFFSIZE, linesToPrint < n; m++) {
+                        buffer2[m] = buffer[m];
+                        if(buffer[m] == '\n'|| readFile == 0) linesToPrint++;
+                    } //for
+                    write(STDOUT_FILENO, buffer2, BUFFSIZE);
+                } //while
+
 
             } else {
             int file = open(fileName, O_RDONLY);
