@@ -34,12 +34,15 @@ int main(int argc, char* argv[]) {
     // printf("%ld", sizeof(fileNames));
     printf("\n");
     int totalC = 0, totalL = 0, totalW = 0, i = 0, printTotals= false;
+
+
     for ( i ; optind  < argc ; optind++,  i++) {
+        int file;
         //printf("%s", argv[optind]);
         if (i >= 1) {
             printTotals = true;
         } //if
-        int file;
+
         char * fileName = argv[optind];
 
         //standard input
