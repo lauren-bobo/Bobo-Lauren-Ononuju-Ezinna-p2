@@ -59,10 +59,14 @@ int main(int argc, char * argv[]) {
 
     //print number of bytes
     if (byteNum) {
+        if (argc == optind) {
+        } //if
         int i = 0;
         //loop through all provided file names in optind
         for( i ; optind < argc; optind++, i++) {
             char * fileName = argv[optind];
+            if (*filename == '-') {
+            } else {
             int file = open(fileName, O_RDONLY);
             //set buffer to size c
             char buffer[c];
@@ -80,14 +84,19 @@ int main(int argc, char * argv[]) {
             //printf("readfile = %d", readFile);
             write(STDOUT_FILENO, buffer, readFile);
             if(readFile == -1) perror("read");
-        } //for
+            } //if
+            } //for
     } //if
 
     // print num lines
         if (lineNum) {
+            if (argc == optind) {
+            } //if
             int i = 0;
             for( i ; optind < argc; optind++, i++) {
                 char * fileName = argv[optind];
+                if (*filename == '-') {
+                } //if
                 int file = open(fileName, O_RDONLY);
                 if (file == -1) perror("open");
                 char buffer[BUFFSIZE];
