@@ -65,7 +65,7 @@ int main(int argc, char * argv[]) {
         //loop through all provided file names in optind
         for( i ; optind < argc; optind++, i++) {
             char * fileName = argv[optind];
-            if (*filename == '-') {
+            if (*fileName == '-') {
             } else {
             int file = open(fileName, O_RDONLY);
             //set buffer to size c
@@ -95,7 +95,7 @@ int main(int argc, char * argv[]) {
             int i = 0;
             for( i ; optind < argc; optind++, i++) {
                 char * fileName = argv[optind];
-                if (*filename == '-') {
+                if (*fileName == '-') {
                 } //if
                 int file = open(fileName, O_RDONLY);
                 if (file == -1) perror("open");
