@@ -7,23 +7,8 @@
 
 #define true 1
 #define false 0
-#define BUFFSIZE 514
+#define BUFFSIZE 1048576
 
-
-void linesStdIn(int * nP)  {
-
-    int n = *nP, linesPrinted = 0, i = 0, readFile = 0;
-    char buffer[BUFFSIZE], buffer2[BUFFSIZE];
-    //read from standard input until EOF recieved
-    while((readFile = read(STDIN_FILENO, buffer, BUFFSIZE)) > 0) {
-        write(STDOUT_FILENO, buffer, readFile);
-    } //while
-
-
-     } //linesStdIn
-
-     void bytesStdIn() {
-     } //bytesStdIn
 
 int main(int argc, char* argv[]) {
     int readFile = 0;
@@ -86,17 +71,24 @@ int main(int argc, char* argv[]) {
         //loop through all provided file names
         for( i ; optind  < argc; optind++,  i++) {
             char * fileName = argv[optind];
-            if (*fileName == '-') {
-            } //if
-            int file = open(fileName, O_RDONLY);
-            if (file == -1) perror("open");
             //set buffer to size c
-            char buffer[c];
-        //read from file at argv[i] for only c bytes and print to std output
-            readFile = read(file, buffer, c);
-            //printf("readfile = %d", readFile);
-            write(STDOUT_FILENO, buffer, readFile);
-            if(readFile == -1) perror("read");
+
+            if (*fileName == '-') {
+                char buffer[BUFFSIZE];
+                while (readFile = read(STDIN_FILENO, buffer, BUFFSIZE) > 0 )
+                {
+                    write(1, buffer,c);
+                }
+            } else {
+                char buffer[c];
+                int file = open(fileName, O_RDONLY);
+                if (file == -1) perror("open");
+                //read from file at argv[i] for only c bytes and print to std output
+                readFile = read(file, buffer, c);
+                write(STDOUT_FILENO, buffer, c);
+                //if
+                if(readFile == -1) perror("read");
+            } //else
         } //for
     } //if
 
@@ -107,10 +99,7 @@ int main(int argc, char* argv[]) {
             //cycle through leftover arguments from optind to ensure not reading -n or -c as files
             char * fileName = argv[optind];
             if (*fileName == '-') {
-                int * nP;
-                *nP = n;
-                linesStdIn(nP);
-            }
+               }
             int file = open(fileName, O_RDONLY);
                 if (file == -1) perror("open");
                 //stores original read file
