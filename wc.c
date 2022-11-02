@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
         //standard input
         if (*fileName == '-') {
             file = STDIN_FILENO;
-            //printf("standard input is not implemented yet :(");
+
         } else {
             file = open(fileName, O_RDONLY);
 
@@ -53,8 +53,7 @@ int main(int argc, char* argv[]) {
         //print c (number of bytes) if specified
         if (c) {
             off_t size = lseek(file, 0, SEEK_END);
-            printf("%ld ", size);
-            //some condition to only add to total if more than 1 file name
+            printf("\t%ld ", size);
             totalC += size;
         } //if c
 
@@ -66,7 +65,7 @@ int main(int argc, char* argv[]) {
                     lineNum++;
                 } //if
             } //for
-            printf("%d ", lineNum);
+            printf("\t%d ", lineNum);
             totalL += lineNum;
         } //if l
 
@@ -83,24 +82,25 @@ int main(int argc, char* argv[]) {
                     wordNum++;
                 } //if
             } //for
-            printf("%d ", wordNum);
+            printf("\t%d ", wordNum);
 
             totalW += wordNum;
 
         } //if w
-        printf("%s\n", fileName);
+
+        printf("\t%s\n", fileName);
     } //for
 
     if (printTotals) {
         if(c) {
-            printf("%d ", totalC) ;
+            printf("\t%d ", totalC) ;
         } //if c
         if(l) {
-            printf("%d ", totalL);
+            printf("\t%d ", totalL);
         } //if l
         if(w) {
-            printf("%d ", totalW);
+            printf("\t%d ", totalW);
         } // if
-        printf("total\n");
+        printf("\ttotal\n");
     } //if
 } //main
