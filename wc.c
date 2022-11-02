@@ -31,11 +31,12 @@ int main(int argc, char* argv[]) {
             w = true;
             l = true;
     } // if
-    // printf("%ld", sizeof(fileNames));
+
     printf("\n");
+
     int totalC = 0, totalL = 0, totalW = 0, i = 0, printTotals= false;
     for ( i ; optind  < argc ; optind++,  i++) {
-        //printf("%s", argv[optind]);
+
         if (i >= 1) {
             printTotals = true;
         } //if
@@ -50,70 +51,133 @@ int main(int argc, char* argv[]) {
 
         } // if
 
-        if (file == -1) perror("open");
+        if (file == -1) {
+                perror("open");
+                return 1;
+        } // if
+
         char buffer[BUFFSIZE];
 
-        int readFile = read(file, buffer, BUFFSIZE);
+        int readFile;
 
-        //print c (number of bytes) if specified
-        if (c == 1) {
-            if (file == STDIN_FILENO) {
-                int size = readFile;
-                printf("\t%d", size);
-                totalC += size;
+        if (*fileName == '-') {
+            int lineNum = 0;
+            int wordNum = 0;
+            int size = 0;
 
-            } else {
-            off_t size = lseek(file, 0, SEEK_END);
+            while ((readFile = read(file, buffer, BUFFSIZE)) > 0) {
+
+                //print l (number of newlines) if specified
+                if (l == 1) {
+                        int k = 0;
+                        for ( k ; k < readFile; k++) {
+                                if(buffer[k] == '\n') {
+                                        lineNum++;
+                                } //if
+                        } //for
+                } //if l
+
+                //print w (number of words) if specified
+                if (w == 1) {
+                        int k = 0;
+                        for ( k ; k < readFile; k++) {
+                                if(buffer[k] == ' ' ||
+                                buffer[k] == '\n' ||
+                                buffer[k] == '\t' ||
+                                buffer[k] == '\r' ||
+                                buffer[k] == '\v' ||
+                                buffer[k] == '\f' ||
+                                buffer[k] == '\0') {
+                                        wordNum++;
+                                } //if
+                        } //for
+
+                } //if w
+
+                //print c (number of bytes) if specified
+                if (c == 1) {
+                        size += readFile;
+                } //if c
+
+            } // while
+
+            printf("\t%d ", lineNum);
+            totalL += lineNum;
+
+            printf("\t%d ", wordNum);
+            totalW += wordNum;
+
             printf("\t%ld ", size);
             totalC += size;
 
-            } // else
-        } //if c
+            printf("\t%s\n", fileName);
 
-        //print l (number of newlines) if specified
-        if (l == 1) {
-            int k = 0, lineNum = 0;
-            for ( k ; k < readFile; k++) {
-                if(buffer[k] == '\n') {
-                    lineNum++;
-                } //if
-            } //for
-            printf("\t%d ", lineNum);
-            totalL += lineNum;
-        } //if l
+        } else {
+            readFile = read(file, buffer, BUFFSIZE);
 
-        //print w (number of words) if specified
-        if (w == 1) {
-            int k = 0, wordNum = 0;
-            for ( k ; k < readFile; k++) {
-                if(buffer[k] == ' ' ||
-                    buffer[k] == '\n' ||
-                    buffer[k] == '\t' ||
-                    buffer[k] == '\r' ||
-                    buffer[k] == '\v' ||
-                    buffer[k] == '\f') {
-                    wordNum++;
-                } //if
-            } //for
-            printf("\t%d ", wordNum);
+            //print l (number of newlines) if specified
+            if (l == 1) {
+                    int k = 0, lineNum = 0;
+                    for ( k ; k < readFile; k++) {
+                            if(buffer[k] == '\n') {
+                                    lineNum++;
+                            } //if
+                    } //for
+                    printf("\t%d ", lineNum);
+                    totalL += lineNum;
+            } //if l
 
-            totalW += wordNum;
+            //print w (number of words) if specified
+            if (w == 1) {
+                    int k = 0, wordNum = 0;
+                    for ( k ; k < readFile; k++) {
+                            if(buffer[k] == ' ' ||
+                            buffer[k] == '\n' ||
+                            buffer[k] == '\t' ||
+                            buffer[k] == '\r' ||
+                            buffer[k] == '\v' ||
+                            buffer[k] == '\f' ||
+                            buffer[k] == '\0') {
+                                    wordNum++;
+                            } //if
+                    } //for
+                    printf("\t%d ", wordNum);
 
-        } //if w
+                    totalW += wordNum;
 
-        printf("\t%s\n", fileName);
+            } //if w
+
+            //print c (number of bytes) if specified
+            if (c == 1) {
+                    if (file == STDIN_FILENO) {
+                            int size = readFile;
+                            printf("\t%d ", size);
+                            totalC += size;
+
+                    } else {
+                            off_t size = lseek(file, 0, SEEK_END);
+                            printf("\t%ld ", size);
+                            totalC += size;
+
+                    } // else
+            } //if c
+
+            printf("\t%s\n", fileName);
+
+        } // if
+
     } //for
 
     if (printTotals) {
-        if(c) {
-            printf("\t%d ", totalC) ;
-        } //if c
         if(l) {
             printf("\t%d ", totalL);
         } //if l
         if(w) {
             printf("\t%d ", totalW);
         } // if
+        if(c) {
+            printf("\t%d ", totalC) ;
+        } //if c
         printf("\ttotal\n");
     } //if
 } //main
