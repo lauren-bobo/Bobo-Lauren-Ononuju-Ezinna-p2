@@ -34,27 +34,31 @@ int main(int argc, char* argv[]) {
         if (i >= 1) {
             printTotals = true;
         } //if
+        int file;
         char * fileName = argv[optind];
         //standard input
         if (*fileName == '-') {
-            printf("standard input is not implemented yet :(");
-        } //if
+            int file = STDIN_FILENO;
+            //printf("standard input is not implemented yet :(");
+        } else {
+            int file = open(fileName, O_RDONLY);
 
-        int file = open(fileName, O_RDONLY);
+        } // if
+
         if (file == -1) perror("open");
         char buffer[BUFFSIZE];
 
         int readFile = read(file, buffer, BUFFSIZE);
-        //print c specified
 
+        //print c (number of bytes) if specified
         if (c) {
-        off_t size = lseek(file, 0, SEEK_END);
-        printf("%ld ", size);
-        //some condition to only add to total if more than 1 file name
-        totalC += size;
-
+            off_t size = lseek(file, 0, SEEK_END);
+            printf("%ld ", size);
+            //some condition to only add to total if more than 1 file name
+            totalC += size;
         } //if c
-        //print l if specified
+
+        //print l (number of newlines) if specified
         if (l) {
             int k = 0, lineNum = 0;
             for ( k ; k < readFile; k++) {
@@ -65,11 +69,17 @@ int main(int argc, char* argv[]) {
             printf("%d ", lineNum);
             totalL += lineNum;
         } //if l
-        //print w if specified
+
+        //print w (number of words) if specified
         if (w) {
             int k = 0, wordNum = 0;
             for ( k ; k < readFile; k++) {
-                if(buffer[k] == ' ' || buffer[k] == '\n' ) {
+                if(buffer[k] == ' ' ||
+                    buffer[k] == '\n' ||
+                    buffer[k] == '\t' ||
+                    buffer[k] == '\r' ||
+                    buffer[k] == '\v' ||
+                    buffer[k] == '\f') {
                     wordNum++;
                 } //if
             } //for
