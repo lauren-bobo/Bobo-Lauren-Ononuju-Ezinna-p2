@@ -26,6 +26,11 @@ int main(int argc, char* argv[]) {
             break;
         } //switch
     } //while
+    if (c == false && w == false && l == false) {
+            c = true;
+            w = true;
+            l = true;
+    } // if
     // printf("%ld", sizeof(fileNames));
     printf("\n");
     int totalC = 0, totalL = 0, totalW = 0, i = 0, printTotals= false;
@@ -51,14 +56,22 @@ int main(int argc, char* argv[]) {
         int readFile = read(file, buffer, BUFFSIZE);
 
         //print c (number of bytes) if specified
-        if (c) {
+        if (c == 1) {
+            if (file == STDIN_FILENO) {
+                int size = readFile;
+                printf("\t%d", size);
+                totalC += size;
+
+            } else {
             off_t size = lseek(file, 0, SEEK_END);
             printf("\t%ld ", size);
             totalC += size;
+
+            } // else
         } //if c
 
         //print l (number of newlines) if specified
-        if (l) {
+        if (l == 1) {
             int k = 0, lineNum = 0;
             for ( k ; k < readFile; k++) {
                 if(buffer[k] == '\n') {
@@ -70,7 +83,7 @@ int main(int argc, char* argv[]) {
         } //if l
 
         //print w (number of words) if specified
-        if (w) {
+        if (w == 1) {
             int k = 0, wordNum = 0;
             for ( k ; k < readFile; k++) {
                 if(buffer[k] == ' ' ||
