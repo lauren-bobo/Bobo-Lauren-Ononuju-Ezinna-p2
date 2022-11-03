@@ -6,7 +6,7 @@
 
 #define true 1
 #define false 0
-#define BUFFSIZE 514
+#define BUFFSIZE 1048576
 int main(int argc, char* argv[]) {
     int opt;
     int c = false, w = false, l = false;
