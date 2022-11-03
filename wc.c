@@ -34,6 +34,69 @@ int main(int argc, char* argv[]) {
 
     printf("\n");
 
+    if (argc == optind) {
+        int totalC = 0, totalL = 0, totalW = 0, i = 0, printTotals= false;
+        int file = STDIN_FILENO;
+        int readFile = 0;
+        char buffer[BUFFSIZE];
+        int lineNum = 0;
+            int wordNum = 0;
+            int size = 0;
+
+            while ((readFile = read(file, buffer, BUFFSIZE)) > 0) {
+
+                //print l (number of newlines) if specified
+                if (l == 1) {
+                        int k = 0;
+                        for ( k ; k < readFile; k++) {
+                                if(buffer[k] == '\n') {
+                                        lineNum++;
+                                } //if
+                        } //for
+                } //if l
+
+                //print w (number of words) if specified
+                if (w == 1) {
+                        int k = 0;
+                        for ( k ; k < readFile; k++) {
+                                   if((!(buffer[k] == ' ' ||
+                            buffer[k] == '\n' ||
+                            buffer[k] == '\t' ||
+                            buffer[k] == '\r' ||
+                            buffer[k] == '\v' ||
+                            buffer[k] == '\f' ||
+                        buffer[k] == '\0') )
+                        && (buffer[k-1] == ' ' ||
+                            buffer[k-1] == '\n' ||
+                            buffer[k-1] == '\t' ||
+                            buffer[k-1] == '\r' ||
+                            buffer[k-1] == '\v' ||
+                            buffer[k-1] == '\f' ||
+                        buffer[k-1] == '\0')  ){
+                                        wordNum++;
+                                } //if
+                        } //for
+
+                } //if w
+
+                //print c (number of bytes) if specified
+                if (c == 1) {
+                        size += readFile;
+                } //if c
+
+            } // while
+
+            printf("\t%d ", lineNum);
+            totalL += lineNum;
+
+            printf("\t%d ", wordNum);
+            totalW += wordNum;
+
+            printf("\t%ld ", size);
+            totalC += size;
+
+    }// if
+
     int totalC = 0, totalL = 0, totalW = 0, i = 0, printTotals= false;
     for ( i ; optind  < argc ; optind++,  i++) {
 
