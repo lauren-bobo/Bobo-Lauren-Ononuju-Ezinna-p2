@@ -81,13 +81,20 @@ int main(int argc, char* argv[]) {
                 if (w == 1) {
                         int k = 0;
                         for ( k ; k < readFile; k++) {
-                                if(buffer[k] == ' ' ||
-                                buffer[k] == '\n' ||
-                                buffer[k] == '\t' ||
-                                buffer[k] == '\r' ||
-                                buffer[k] == '\v' ||
-                                buffer[k] == '\f' ||
-                                buffer[k] == '\0') {
+                                   if((!(buffer[k] == ' ' ||
+                            buffer[k] == '\n' ||
+                            buffer[k] == '\t' ||
+                            buffer[k] == '\r' ||
+                            buffer[k] == '\v' ||
+                            buffer[k] == '\f' ||
+                        buffer[k] == '\0') )
+                        && (buffer[k-1] == ' ' ||
+                            buffer[k-1] == '\n' ||
+                            buffer[k-1] == '\t' ||
+                            buffer[k-1] == '\r' ||
+                            buffer[k-1] == '\v' ||
+                            buffer[k-1] == '\f' ||
+                        buffer[k-1] == '\0')  ){
                                         wordNum++;
                                 } //if
                         } //for
