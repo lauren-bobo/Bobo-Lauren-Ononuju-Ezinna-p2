@@ -60,12 +60,14 @@ int main(int argc, char * argv[]) {
     //print number of bytes
     if (byteNum) {
         if (argc == optind) {
+
         } //if
         int i = 0;
         //loop through all provided file names in optind
         for( i ; optind < argc; optind++, i++) {
             char * fileName = argv[optind];
             if (*fileName == '-') {
+
             } else {
                 int file = open(fileName, O_RDONLY);
                 //set buffer to size c
@@ -95,8 +97,43 @@ int main(int argc, char * argv[]) {
         int i = 0;
         for( i ; optind < argc; optind++, i++) {
             char * fileName = argv[optind];
+            //STDIN
             if (*fileName == '-') {
-            } //if
+                char buffer[BUFFSIZE];
+                //loop until end signal recieved
+                while((readFile = read(STDIN_FILENO, buffer, BUFFSIZE) ) > 0) {
+                    //looping until EOF
+                } //while
+
+                    //count lines in recieved stdin
+                    int k = 0, lineNum = 0;
+                    for ( k ; k < BUFFSIZE; k++) {
+                        if(buffer[k] == '\n') {
+                            lineNum++;
+                        } //if
+                    }//for
+                    int startPoint = lineNum - n;
+
+                    char buffer2[BUFFSIZE];
+                    lineNum = 0;
+
+                    int j = 0;
+                    for( j; j < BUFFSIZE; j++) {
+
+                        if (buffer[j] == '\n') {
+                            lineNum++;
+                        }//if
+                        if (lineNum >= startPoint) {
+                            buffer2[j] = buffer[j];
+                        } //if
+
+                    } //for
+
+                    write(STDOUT_FILENO, buffer2, BUFFSIZE);
+
+            //if
+
+            } else {
             int file = open(fileName, O_RDONLY);
             if (file == -1) perror("open");
             char buffer[BUFFSIZE];
@@ -133,6 +170,6 @@ int main(int argc, char * argv[]) {
             //write only buffer2 with the specified number of lines
             write(STDOUT_FILENO, buffer2, readFile);
         } //for
-
+        } //if
     } //if n
 } //main
