@@ -91,7 +91,6 @@ int main(int argc, char* argv[]) {
                 readFile = read(STDIN_FILENO, buffer, bytesPrinted);
                 write(STDOUT_FILENO, buffer, bytesPrinted);
                 bytesPrinted = bytesPrinted - readFile;
-
                 } // while
             } else {
                 char buffer[c];

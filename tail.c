@@ -41,19 +41,9 @@ int main(int argc, char * argv[]) {
             } else {
                 c = atoi(optarg);
             } //if
-            //throwing error if target not present
-            case ':': {
-                if (lineNum) {
-                    errno = EINVAL;
-                    perror(argv[0]);
-                } // lineNum
-                if (byteNum) {
-                    errno = EINVAL;
-                    perror(argv[0]);
-                }
-            } // ':'
-                break;
+            break;
         } //case c
+
         } //switch
     } //while
 
@@ -66,7 +56,27 @@ int main(int argc, char * argv[]) {
         //loop through all provided file names in optind
         for( i ; optind < argc; optind++, i++) {
             char * fileName = argv[optind];
+
             if (*fileName == '-') {
+                char buffer[BUFFSIZE];
+                int totalBytes;
+
+                while( (readFile = read(STDIN_FILENO, buffer, BUFFSIZE)) > 0) {
+                    totalBytes = totalBytes + readFile;
+
+                } //while
+                int  startingPoint = totalBytes - c;
+
+                int i = 0;
+
+                char buffer2[totalBytes];
+                for(i; i < totalBytes; i++) {
+                    if (i > startingPoint) {
+                        buffer2[i] = buffer[i];
+                    } //if
+                } //for
+                printf("\n%d\n", startingPoint);
+                write(STDOUT_FILENO, buffer2, c);
 
             } else {
                 int file = open(fileName, O_RDONLY);
@@ -84,12 +94,15 @@ int main(int argc, char * argv[]) {
                 //read from file at argv[i] for only c bytes and print to std output
                 readFile = read(file, buffer, c);
                 //printf("readfile = %d", readFile);
-                write(STDOUT_FILENO, buffer, readFile);
+                write(STDOUT_FILENO, buffer, c);
                 if(readFile == -1) perror("read");
             } //if
         } //for
     } //if
 
+
+    /*
+     *Line Number*/
     // print num lines
     if (lineNum) {
         if (argc == optind) {
