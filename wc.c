@@ -8,6 +8,8 @@
 #define false 0
 #define BUFFSIZE 1048576
 int main(int argc, char* argv[]) {
+    setbuf(stdout, NULL);
+
     int opt;
     int c = false, w = false, l = false;
     int indexOfFileNameStart = 1;
@@ -114,11 +116,6 @@ int main(int argc, char* argv[]) {
 
         } // if
 
-        if (file == -1) {
-                perror("open");
-                return 1;
-        } // if
-
         char buffer[BUFFSIZE];
 
         int readFile;
@@ -181,6 +178,9 @@ int main(int argc, char* argv[]) {
             totalC += size;
 
             printf("\t%s\n", fileName);
+
+        } else if (file == -1) {
+            perror("open");
 
         } else {
             readFile = read(file, buffer, BUFFSIZE);
