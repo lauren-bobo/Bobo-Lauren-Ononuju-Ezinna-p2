@@ -71,12 +71,12 @@ int main(int argc, char* argv[]) {
         //stdin case no args
         if (optind == argc) {
             char buffer[c];
-            int bytesPrinted = 0;
-            while ( bytesPrinted < c) {
-                bytesPrinted +=  read(STDIN_FILENO, buffer, c);
-                } //while
-            write(STDOUT_FILENO, buffer, c);
-
+            int bytesPrinted = c;
+            while (bytesPrinted > 0) {
+                readFile = read(STDIN_FILENO, buffer, bytesPrinted);
+                 write(STDOUT_FILENO, buffer, bytesPrinted);
+                 bytesPrinted = bytesPrinted - readFile;
+            }//while
         } //if
         //start after command line arguments
         //loop through all provided file names
@@ -86,12 +86,13 @@ int main(int argc, char* argv[]) {
 
             if (*fileName == '-') {
                 char buffer[c];
-                int bytesPrinted = 0;
-                while ( bytesPrinted < c) {
-                    bytesPrinted +=  read(STDIN_FILENO, buffer, c);
-                } //while
-                    write(STDOUT_FILENO, buffer, c);
+                int bytesPrinted = c;
+                while (bytesPrinted > 0) {
+                readFile = read(STDIN_FILENO, buffer, bytesPrinted);
+                write(STDOUT_FILENO, buffer, bytesPrinted);
+                bytesPrinted = bytesPrinted - readFile;
 
+                } // while
             } else {
                 char buffer[c];
                 int file = open(fileName, O_RDONLY);
@@ -117,6 +118,7 @@ int main(int argc, char* argv[]) {
 
                     int m = 0;
                     readFile = read(STDIN_FILENO, buffer, BUFFSIZE);
+
                     for (m; m < BUFFSIZE && linesPrinted < n ; m++) {
                         buffer2[m] = buffer[m];
                         if(buffer[m] == '\n') linesPrinted++;
