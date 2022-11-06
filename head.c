@@ -110,7 +110,7 @@ int main(int argc, char* argv[]) {
 
     // print num lines
     if (lineNum) {
-        if (optind == argc || argc == 3) {
+        if (optind == argc || (optind == 1 && argc == 3)) {
             int linesPrinted = 0;
 
                 while (linesPrinted < n) {
