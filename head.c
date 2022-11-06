@@ -9,7 +9,6 @@
 #define false 0
 #define BUFFSIZE 1048576
 
-
 int main(int argc, char* argv[]) {
     int readFile = 0;
     int c = 0,n = 10;
@@ -54,10 +53,12 @@ int main(int argc, char* argv[]) {
             if (lineNum) {
                 errno = EINVAL;
                 perror(argv[0]);
+                return EXIT_FAILURE;
             } // lineNum
             if (byteNum) {
                 errno = EINVAL;
                 perror(argv[0]);
+                return EXIT_FAILURE;
             }
         } // ':'
         } //switch
@@ -69,7 +70,7 @@ int main(int argc, char* argv[]) {
     if (byteNum) {
 
         //stdin case no args
-        if (optind == argc) {
+        if (optind == argc || argc == 3) {
             char buffer[c];
             int bytesPrinted = c;
             while (bytesPrinted > 0) {
@@ -77,6 +78,7 @@ int main(int argc, char* argv[]) {
                  write(STDOUT_FILENO, buffer, bytesPrinted);
                  bytesPrinted = bytesPrinted - readFile;
             }//while
+            return EXIT_SUCCESS;
         } //if
         //start after command line arguments
         //loop through all provided file names
@@ -108,7 +110,7 @@ int main(int argc, char* argv[]) {
 
     // print num lines
     if (lineNum) {
-        if (optind == argc) {
+        if (optind == argc || argc == 3) {
             int linesPrinted = 0;
 
                 while (linesPrinted < n) {
@@ -126,6 +128,7 @@ int main(int argc, char* argv[]) {
 
                 } //while
 
+                return EXIT_SUCCESS;
         } //if
         for( i ; optind < argc; optind++, i++) {
             //cycle through leftover arguments from optind to ensure not reading -n or -c as files
