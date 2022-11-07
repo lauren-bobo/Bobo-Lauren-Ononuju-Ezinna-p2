@@ -36,6 +36,7 @@
     - true
     - false
     - env
+    - setbuf()
     - .6 wc
     - .5 stdin on all functions
     - code cleaning
