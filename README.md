@@ -1,6 +1,6 @@
 # Bobo-Lauren-Ononuju-Ezinna-p2
     Lauren Bobo (811232648)
-    Ezinna Ononuju ()
+    Ezinna Ononuju (811145142)
 
     Compilation:
             ~ To compile the code, use the | $ make | command. This will create an executabe for each asset of the project. Here is a list of all the executables:
