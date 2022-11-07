@@ -15,7 +15,7 @@ int main(int argc, char * argv[]) {
     int byteNum = false, lineNum = true;
     int opt;
 
-
+    setbuf(stdout,NULL);
     while((opt = getopt(argc,argv, ":n:c:")) != -1) {
 
         switch(opt) {
@@ -96,11 +96,13 @@ int main(int argc, char * argv[]) {
                 write(STDOUT_FILENO, buffer2, c);
 
             } else {
+
                 int file = open(fileName, O_RDONLY);
                 if (file == -1) {
                     perror("open");
                     return EXIT_SUCCESS;
                 } //if
+
                 //set buffer to size c
                 char buffer[c];
                 //find size of entire file n bytes
@@ -116,7 +118,8 @@ int main(int argc, char * argv[]) {
                 } //if
                 //read from file at argv[i] for only c bytes and print to std output
                 readFile = read(file, buffer, c);
-                //printf("readfile = %d", readFile);
+                printf("\n===>%s<===\n", fileName);
+
                 write(STDOUT_FILENO, buffer, c);
                 if(readFile == -1) {
                     perror("read");
@@ -248,6 +251,7 @@ int main(int argc, char * argv[]) {
                     }//if
                 } //for j
                 //write only buffer2 with the specified number of lines
+                printf("\n===>%s<===\n", fileName);
                 write(STDOUT_FILENO, buffer2, readFile);
             } //for
         } //if

@@ -16,6 +16,7 @@ int main(int argc, char* argv[]) {
     int byteNum = false,  lineNum = true;
     int opt;
 
+    setbuf(stdout,NULL);
     //opt parses arguments,
     while((opt = getopt(argc,argv, ":n:c:")) != -1) {
 
@@ -85,6 +86,7 @@ int main(int argc, char* argv[]) {
                     bytesPrinted = bytesPrinted - readFile;
                 } // while
             } else {
+
                 char buffer[c];
                 int file = open(fileName, O_RDONLY);
                 if (file == -1)
@@ -94,13 +96,13 @@ int main(int argc, char* argv[]) {
                 } //if
                 //read from file at argv[i] for only c bytes and print to std output
                 readFile = read(file, buffer, c);
-                 write(STDOUT_FILENO, buffer, c);
-                //if
-                if(readFile == -1)
+                 if(readFile == -1)
                 {
                     perror("read");
                     return EXIT_SUCCESS;
                 } //if
+                printf("\n===>%s<===\n", fileName);
+                write(STDOUT_FILENO, buffer, c);
 
                 } //else
         } //for
@@ -150,6 +152,7 @@ int main(int argc, char* argv[]) {
 
             } else {
                 int file = open(fileName, O_RDONLY);
+
                 if (file == -1) {
                     perror("open");
                     return EXIT_SUCCESS;
@@ -175,10 +178,12 @@ int main(int argc, char* argv[]) {
                         lineNum++;
                     } //if
                 } //for j
+                printf("\n===>%s<===\n", fileName);
                 //write only buffer2 with the specified number of lines
                 write(STDOUT_FILENO, buffer2, readFile);
 
             } //else
+
         } //for
 
     } //if n

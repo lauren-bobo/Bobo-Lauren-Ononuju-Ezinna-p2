@@ -5,9 +5,10 @@ echo "format: \n
 .\mine
 \n unix"
 
+echo "----case 1---"
 ./head file1.txt
 head file1.txt
-
+echo "---case 2---"
 ./head file1.txt file2.txt
 head file1.txt file2.txt
 
