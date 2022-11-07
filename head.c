@@ -15,6 +15,7 @@ int main(int argc, char* argv[]) {
     int c = 0,n = 10;
     int byteNum = false,  lineNum = true;
     int opt;
+
     //opt parses arguments,
     while((opt = getopt(argc,argv, ":n:c:")) != -1) {
 
@@ -42,27 +43,17 @@ int main(int argc, char* argv[]) {
             if (!(atoi(optarg)>0)) {
                 //errno = EINVAL;
                 //perror(argv[0]);
+                /*FIX*/ //make perror
                 fprintf(stderr, "%s: %s:invalid number of bytes\n", argv[0], argv[2]);
                 return EXIT_SUCCESS;
             } else {
                 c = atoi(optarg);
             } //if
             break;
-        }
-            //not throwing error if argument not present
-        case ':': {
-            if (lineNum) {
-                errno = EINVAL;
-                perror(argv[0]);
-            } // lineNum
-            if (byteNum) {
-                errno = EINVAL;
-                perror(argv[0]);
-            }
-        } // ':'
+        } //c
         } //switch
     } //while
-        /* temporary */
+    /* temporary */
 
     int i = 0;
     //print number of bytes
@@ -74,8 +65,9 @@ int main(int argc, char* argv[]) {
             int bytesPrinted = c;
             while (bytesPrinted > 0) {
                 readFile = read(STDIN_FILENO, buffer, bytesPrinted);
-                 write(STDOUT_FILENO, buffer, bytesPrinted);
-                 bytesPrinted = bytesPrinted - readFile;
+                write(STDOUT_FILENO, buffer, bytesPrinted);
+
+                bytesPrinted = bytesPrinted - readFile;
             }//while
         } //if
         //start after command line arguments
@@ -88,20 +80,29 @@ int main(int argc, char* argv[]) {
                 char buffer[c];
                 int bytesPrinted = c;
                 while (bytesPrinted > 0) {
-                readFile = read(STDIN_FILENO, buffer, bytesPrinted);
-                write(STDOUT_FILENO, buffer, bytesPrinted);
-                bytesPrinted = bytesPrinted - readFile;
+                    readFile = read(STDIN_FILENO, buffer, bytesPrinted);
+                    write(STDOUT_FILENO, buffer, bytesPrinted);
+                    bytesPrinted = bytesPrinted - readFile;
                 } // while
             } else {
                 char buffer[c];
                 int file = open(fileName, O_RDONLY);
-                if (file == -1) perror("open");
+                if (file == -1)
+                {
+                    perror("open");
+                    return EXIT_SUCCESS;
+                } //if
                 //read from file at argv[i] for only c bytes and print to std output
                 readFile = read(file, buffer, c);
-                write(STDOUT_FILENO, buffer, c);
+                 write(STDOUT_FILENO, buffer, c);
                 //if
-                if(readFile == -1) perror("read");
-            } //else
+                if(readFile == -1)
+                {
+                    perror("read");
+                    return EXIT_SUCCESS;
+                } //if
+
+                } //else
         } //for
     } //if
 
@@ -111,20 +112,20 @@ int main(int argc, char* argv[]) {
         if (optind == argc) {
             int linesPrinted = 0;
 
-                while (linesPrinted < n) {
-                    char buffer[BUFFSIZE];
-                    char buffer2[BUFFSIZE];
+            while (linesPrinted < n) {
+                char buffer[BUFFSIZE];
+                char buffer2[BUFFSIZE];
 
-                    int m = 0;
-                    readFile = read(STDIN_FILENO, buffer, BUFFSIZE);
+                int m = 0;
+                readFile = read(STDIN_FILENO, buffer, BUFFSIZE);
 
-                    for (m; m < BUFFSIZE && linesPrinted < n ; m++) {
-                        buffer2[m] = buffer[m];
-                        if(buffer[m] == '\n') linesPrinted++;
-                    } //for
-                    write(STDOUT_FILENO, buffer2, BUFFSIZE);
+                for (m; m < BUFFSIZE && linesPrinted < n ; m++) {
+                    buffer2[m] = buffer[m];
+                    if(buffer[m] == '\n') linesPrinted++;
+                } //for
+                 write(STDOUT_FILENO, buffer2, BUFFSIZE);
 
-                } //while
+            } //while
 
         } //if
         for( i ; optind < argc; optind++, i++) {
@@ -144,18 +145,23 @@ int main(int argc, char* argv[]) {
                         buffer2[m] = buffer[m];
                         if(buffer[m] == '\n') linesPrinted++;
                     } //for
-                    write(STDOUT_FILENO, buffer2, BUFFSIZE);
-
+                     write(STDOUT_FILENO, buffer2, BUFFSIZE);
                 } //while
 
             } else {
-            int file = open(fileName, O_RDONLY);
-                if (file == -1) perror("open");
+                int file = open(fileName, O_RDONLY);
+                if (file == -1) {
+                    perror("open");
+                    return EXIT_SUCCESS;
+                } //if
                 //stores original read file
                 char buffer[BUFFSIZE];
                 //read file and print it until lines exceed n
                 readFile = read(file, buffer, BUFFSIZE);
-                if(readFile == -1) perror("read");
+                if(readFile == -1) {
+                    perror("read");
+                    return EXIT_SUCCESS;
+                } //if
                 int lineNum = 0, j = 0;
                 //stores only bytes we want written
                 char buffer2[BUFFSIZE];
@@ -171,8 +177,9 @@ int main(int argc, char* argv[]) {
                 } //for j
                 //write only buffer2 with the specified number of lines
                 write(STDOUT_FILENO, buffer2, readFile);
-            } //else
-            } //for
 
-        } //if n
+            } //else
+        } //for
+
+    } //if n
 } // main

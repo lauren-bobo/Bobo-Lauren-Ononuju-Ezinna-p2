@@ -14,6 +14,8 @@ int main(int argc, char * argv[]) {
     int c= 0,n = 10;
     int byteNum = false, lineNum = true;
     int opt;
+
+
     while((opt = getopt(argc,argv, ":n:c:")) != -1) {
 
         switch(opt) {
@@ -64,7 +66,7 @@ int main(int argc, char * argv[]) {
             for(i; i > 0; i--) {
                 buffer2[i] = buffer[i];
 
-                } //for
+            } //for
 
             write(STDOUT_FILENO, buffer2, c);
 
@@ -95,6 +97,10 @@ int main(int argc, char * argv[]) {
 
             } else {
                 int file = open(fileName, O_RDONLY);
+                if (file == -1) {
+                    perror("open");
+                    return EXIT_SUCCESS;
+                } //if
                 //set buffer to size c
                 char buffer[c];
                 //find size of entire file n bytes
@@ -104,13 +110,18 @@ int main(int argc, char * argv[]) {
                 off_t startingPoint =  size - c;
                 //set the file's offset to that new starting point
                 lseek(file, startingPoint, SEEK_SET);
-                if (size == -1) perror("lseek");
-                if (file == -1) perror("open");
+                if (size == -1) {
+                    perror("lseek");
+                    return EXIT_SUCCESS;
+                } //if
                 //read from file at argv[i] for only c bytes and print to std output
                 readFile = read(file, buffer, c);
                 //printf("readfile = %d", readFile);
                 write(STDOUT_FILENO, buffer, c);
-                if(readFile == -1) perror("read");
+                if(readFile == -1) {
+                    perror("read");
+                    return EXIT_SUCCESS;
+                } //if
             } //if
         } //for
     } //if
@@ -121,37 +132,37 @@ int main(int argc, char * argv[]) {
     // print num lines
     if (lineNum) {
         if (argc == optind) {
-             char buffer[BUFFSIZE];
-                //loop until end signal recieved
-                while((readFile = read(STDIN_FILENO, buffer, BUFFSIZE) ) > 0) {
-                    //looping until EOF
-                } //while
+            char buffer[BUFFSIZE];
+            //loop until end signal recieved
+            while((readFile = read(STDIN_FILENO, buffer, BUFFSIZE) ) > 0) {
+                //looping until EOF
+            } //while
 
-                    //count lines in recieved stdin
-                    int k = 0, lineNum = 0;
-                    for ( k ; k < BUFFSIZE; k++) {
-                        if(buffer[k] == '\n') {
-                            lineNum++;
-                        } //if
-                    }//for
-                    int startPoint = lineNum - n;
+            //count lines in recieved stdin
+            int k = 0, lineNum = 0;
+            for ( k ; k < BUFFSIZE; k++) {
+                if(buffer[k] == '\n') {
+                    lineNum++;
+                } //if
+            }//for
+            int startPoint = lineNum - n;
 
-                    char buffer2[BUFFSIZE];
-                    lineNum = 1;
+            char buffer2[BUFFSIZE];
+            lineNum = 1;
 
-                    int j = 0;
-                    for( j; j < BUFFSIZE; j++) {
+            int j = 0;
+            for( j; j < BUFFSIZE; j++) {
 
-                        if (buffer[j] == '\n') {
-                            lineNum++;
-                        }//if
-                        if (lineNum >= startPoint) {
-                            buffer2[j] = buffer[j];
-                        } //if
+                if (buffer[j] == '\n') {
+                    lineNum++;
+                }//if
+                if (lineNum >= startPoint) {
+                    buffer2[j] = buffer[j];
+                } //if
 
-                    } //for
+            } //for
 
-                    write(STDOUT_FILENO, buffer2, BUFFSIZE);
+            write(STDOUT_FILENO, buffer2, BUFFSIZE);
 
         } //if
         int i = 0;
@@ -165,71 +176,80 @@ int main(int argc, char * argv[]) {
                     //looping until EOF
                 } //while
 
-                    //count lines in recieved stdin
-                    int k = 0, lineNum = 0;
-                    for ( k ; k < BUFFSIZE; k++) {
-                        if(buffer[k] == '\n') {
-                            lineNum++;
-                        } //if
-                    }//for
-                    int startPoint = lineNum - n;
+                //count lines in recieved stdin
+                int k = 0, lineNum = 0;
+                for ( k ; k < BUFFSIZE; k++) {
+                    if(buffer[k] == '\n') {
+                        lineNum++;
+                    } //if
+                }//for
+                int startPoint = lineNum - n;
 
-                    char buffer2[BUFFSIZE];
-                    lineNum = 1;
+                char buffer2[BUFFSIZE];
+                lineNum = 1;
 
-                    int j = 0;
-                    for( j; j < BUFFSIZE; j++) {
+                int j = 0;
+                for( j; j < BUFFSIZE; j++) {
 
-                        if (buffer[j] == '\n') {
-                            lineNum++;
-                        }//if
-                        if (lineNum >= startPoint) {
-                            buffer2[j] = buffer[j];
-                        } //if
+                    if (buffer[j] == '\n') {
+                        lineNum++;
+                    }//if
+                    //START initializing once line number of starting point is reached
+                    if (lineNum >= startPoint) {
+                        buffer2[j] = buffer[j];
+                    } //if
 
-                    } //for
+                } //for
 
-                    write(STDOUT_FILENO, buffer2, BUFFSIZE);
+                write(STDOUT_FILENO, buffer2, BUFFSIZE);
 
-            //if
+                //if
 
             } else {
-            int file = open(fileName, O_RDONLY);
-            if (file == -1) perror("open");
-            char buffer[BUFFSIZE];
-            //read file and print it until lines exceed n
-            readFile = read(file, buffer, BUFFSIZE);
-            if(readFile == -1) perror("read");
-            int lineNum = 0;
-            int k = 0;
-            int j = 0;
-            //count total number of lines in file
-            for ( k ; k < readFile; k++) {
-                if(buffer[k] == '\n') {
-                    lineNum++;
-                } //if
-            } //for
-            //start the translation at the end line minus the number of
-            //lines to print
-            int startPoint = lineNum - n;
-            //make a copy to transfer lines to write
-            char buffer2[BUFFSIZE];
-            //read for new line characters and initialize everything up
-            //to there into buff2 to be read
-            lineNum = 0;
-            //starts copying at starting point in file
-            //(could probably make j equal to starting point but
-            for( j; j < readFile; j++) {
-                if (lineNum >= startPoint) {
-                    buffer2[j] = buffer[j];
-                } //if
-                if (buffer[j] == '\n') {
-                    lineNum++;
+                //open file
+                int file = open(fileName, O_RDONLY);
+                if (file == -1) {
+                    perror("open");
+                    return EXIT_SUCCESS;
                 }//if
-            } //for j
-            //write only buffer2 with the specified number of lines
-            write(STDOUT_FILENO, buffer2, readFile);
-        } //for
+
+                char buffer[BUFFSIZE];
+                //read file and print it until lines exceed n
+                readFile = read(file, buffer, BUFFSIZE);
+                if(readFile == -1) {
+                    perror("read");
+                    return EXIT_SUCCESS;
+                } //if
+
+                int lineNum = 0, k = 0, j = 0;
+                //count total number of lines in file
+                for ( k ; k < readFile; k++) {
+                    if(buffer[k] == '\n') {
+                        lineNum++;
+                    } //if
+                } //for
+
+                //start the translation at the end line minus the number of
+                //lines to print
+                int startPoint = lineNum - n;
+                //make a copy to transfer lines to write
+                char buffer2[BUFFSIZE];
+                //read for new line characters and initialize everything up
+                //to there into buff2 to be read
+                lineNum = 0;
+                //starts copying at starting point in file
+                //(could probably make j equal to starting point but
+                for( j; j < readFile; j++) {
+                    if (lineNum >= startPoint) {
+                        buffer2[j] = buffer[j];
+                    } //if
+                    if (buffer[j] == '\n') {
+                        lineNum++;
+                    }//if
+                } //for j
+                //write only buffer2 with the specified number of lines
+                write(STDOUT_FILENO, buffer2, readFile);
+            } //for
         } //if
     } //if n
 } //main
