@@ -50,6 +50,23 @@ int main(int argc, char * argv[]) {
     //print number of bytes
     if (byteNum) {
         if (argc == optind) {
+            char buffer[BUFFSIZE];
+            int totalBytes;
+
+            while( (readFile = read(STDIN_FILENO, buffer, BUFFSIZE)) > 0) {
+                totalBytes = totalBytes + readFile;
+
+            } //while
+
+            int i = totalBytes;
+
+            char buffer2[c];
+            for(i; i > 0; i--) {
+                buffer2[i] = buffer[i];
+
+                } //for
+
+            write(STDOUT_FILENO, buffer2, c);
 
         } //if
         int i = 0;
@@ -104,6 +121,38 @@ int main(int argc, char * argv[]) {
     // print num lines
     if (lineNum) {
         if (argc == optind) {
+             char buffer[BUFFSIZE];
+                //loop until end signal recieved
+                while((readFile = read(STDIN_FILENO, buffer, BUFFSIZE) ) > 0) {
+                    //looping until EOF
+                } //while
+
+                    //count lines in recieved stdin
+                    int k = 0, lineNum = 0;
+                    for ( k ; k < BUFFSIZE; k++) {
+                        if(buffer[k] == '\n') {
+                            lineNum++;
+                        } //if
+                    }//for
+                    int startPoint = lineNum - n;
+
+                    char buffer2[BUFFSIZE];
+                    lineNum = 1;
+
+                    int j = 0;
+                    for( j; j < BUFFSIZE; j++) {
+
+                        if (buffer[j] == '\n') {
+                            lineNum++;
+                        }//if
+                        if (lineNum >= startPoint) {
+                            buffer2[j] = buffer[j];
+                        } //if
+
+                    } //for
+
+                    write(STDOUT_FILENO, buffer2, BUFFSIZE);
+
         } //if
         int i = 0;
         for( i ; optind < argc; optind++, i++) {
@@ -126,7 +175,7 @@ int main(int argc, char * argv[]) {
                     int startPoint = lineNum - n;
 
                     char buffer2[BUFFSIZE];
-                    lineNum = 0;
+                    lineNum = 1;
 
                     int j = 0;
                     for( j; j < BUFFSIZE; j++) {
