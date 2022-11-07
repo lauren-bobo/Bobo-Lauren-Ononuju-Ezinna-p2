@@ -138,8 +138,8 @@ int main(int argc, char* argv[]) {
                 int linesPrinted = 0;
 
                 while (linesPrinted < n) {
-                    char buffer[BUFFSIZE];
-                    char buffer2[BUFFSIZE];
+                    char buffer[BUFFSIZE] = {};
+                    char buffer2[BUFFSIZE] ={} ;
 
                     int m = 0;
                     readFile = read(STDIN_FILENO, buffer, BUFFSIZE);
@@ -157,8 +157,9 @@ int main(int argc, char* argv[]) {
                     perror("open");
                     return EXIT_SUCCESS;
                 } //if
+
                 //stores original read file
-                char buffer[BUFFSIZE];
+                char buffer[BUFFSIZE] = {};
                 //read file and print it until lines exceed n
                 readFile = read(file, buffer, BUFFSIZE);
                 if(readFile == -1) {
@@ -167,10 +168,10 @@ int main(int argc, char* argv[]) {
                 } //if
                 int lineNum = 0, j = 0;
                 //stores only bytes we want written
-                char buffer2[BUFFSIZE];
+                char buffer2[BUFFSIZE] = {};
                 //read for new line characters and initialize everything up
                 //to there into buff2 to be written
-                for( j;  j < readFile && lineNum < n; j++) {
+                for( j;  lineNum < n && j < readFile ; j++) {
                     //copies buff 2 until line limit reached
                     buffer2[j] = buffer[j];
                     //check for new line characters
@@ -181,6 +182,7 @@ int main(int argc, char* argv[]) {
                 printf("\n===>%s<===\n", fileName);
                 //write only buffer2 with the specified number of lines
                 write(STDOUT_FILENO, buffer2, readFile);
+
 
             } //else
 

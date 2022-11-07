@@ -77,7 +77,7 @@ int main(int argc, char * argv[]) {
             char * fileName = argv[optind];
 
             if (*fileName == '-') {
-                char buffer[BUFFSIZE];
+                char buffer[BUFFSIZE] = {};
                 int totalBytes;
 
                 while( (readFile = read(STDIN_FILENO, buffer, BUFFSIZE)) > 0) {
@@ -173,7 +173,7 @@ int main(int argc, char * argv[]) {
             char * fileName = argv[optind];
             //STDIN
             if (*fileName == '-') {
-                char buffer[BUFFSIZE];
+                char buffer[BUFFSIZE] = {};
                 //loop until end signal recieved
                 while((readFile = read(STDIN_FILENO, buffer, BUFFSIZE) ) > 0) {
                     //looping until EOF
@@ -188,7 +188,7 @@ int main(int argc, char * argv[]) {
                 }//for
                 int startPoint = lineNum - n;
 
-                char buffer2[BUFFSIZE];
+                char buffer2[BUFFSIZE] = {};
                 lineNum = 1;
 
                 int j = 0;
@@ -216,7 +216,7 @@ int main(int argc, char * argv[]) {
                     return EXIT_SUCCESS;
                 }//if
 
-                char buffer[BUFFSIZE];
+                char buffer[BUFFSIZE]={};
                 //read file and print it until lines exceed n
                 readFile = read(file, buffer, BUFFSIZE);
                 if(readFile == -1) {
@@ -236,7 +236,7 @@ int main(int argc, char * argv[]) {
                 //lines to print
                 int startPoint = lineNum - n;
                 //make a copy to transfer lines to write
-                char buffer2[BUFFSIZE];
+                char buffer2[BUFFSIZE] = {};
                 //read for new line characters and initialize everything up
                 //to there into buff2 to be read
                 lineNum = 0;
