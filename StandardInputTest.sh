@@ -2,6 +2,11 @@
 
 echo "standard input"
  ./head
+ hello
+ hi
+ hello
+ $EOF
+
  head
 
  ./tail -

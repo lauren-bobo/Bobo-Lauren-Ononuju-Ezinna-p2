@@ -52,8 +52,8 @@ int main(int argc, char * argv[]) {
     //print number of bytes
     if (byteNum) {
         if (argc == optind) {
-            char buffer[BUFFSIZE];
-            int totalBytes;
+            char buffer[BUFFSIZE] = {};
+            int totalBytes = 0;
 
             while( (readFile = read(STDIN_FILENO, buffer, BUFFSIZE)) > 0) {
                 totalBytes = totalBytes + readFile;
@@ -78,7 +78,7 @@ int main(int argc, char * argv[]) {
 
             if (*fileName == '-') {
                 char buffer[BUFFSIZE] = {};
-                int totalBytes;
+                int totalBytes = 0;
 
                 while( (readFile = read(STDIN_FILENO, buffer, BUFFSIZE)) > 0) {
                     totalBytes = totalBytes + readFile;
@@ -118,7 +118,7 @@ int main(int argc, char * argv[]) {
                 } //if
                 //read from file at argv[i] for only c bytes and print to std output
                 readFile = read(file, buffer, c);
-                printf("\n===>%s<===\n", fileName);
+                printf("\n==>%s<==\n", fileName);
 
                 write(STDOUT_FILENO, buffer, c);
                 if(readFile == -1) {
@@ -135,7 +135,7 @@ int main(int argc, char * argv[]) {
     // print num lines
     if (lineNum) {
         if (argc == optind) {
-            char buffer[BUFFSIZE];
+            char buffer[BUFFSIZE] = {};
             //loop until end signal recieved
             while((readFile = read(STDIN_FILENO, buffer, BUFFSIZE) ) > 0) {
                 //looping until EOF
@@ -150,7 +150,7 @@ int main(int argc, char * argv[]) {
             }//for
             int startPoint = lineNum - n;
 
-            char buffer2[BUFFSIZE];
+            char buffer2[BUFFSIZE] = {};
             lineNum = 1;
 
             int j = 0;
@@ -251,7 +251,7 @@ int main(int argc, char * argv[]) {
                     }//if
                 } //for j
                 //write only buffer2 with the specified number of lines
-                printf("\n===>%s<===\n", fileName);
+                printf("\n==>%s<==\n", fileName);
                 write(STDOUT_FILENO, buffer2, readFile);
             } //for
         } //if

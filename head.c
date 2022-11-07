@@ -62,10 +62,11 @@ int main(int argc, char* argv[]) {
 
         //stdin case no args
         if (optind == argc) {
-            char buffer[c];
+
             int bytesPrinted = c;
             while (bytesPrinted > 0) {
-                readFile = read(STDIN_FILENO, buffer, bytesPrinted);
+                char buffer[BUFFSIZE]= {};
+                readFile = read(STDIN_FILENO, buffer, BUFFSIZE);
                 write(STDOUT_FILENO, buffer, bytesPrinted);
 
                 bytesPrinted = bytesPrinted - readFile;
@@ -78,10 +79,11 @@ int main(int argc, char* argv[]) {
             //set buffer to size c
 
             if (*fileName == '-') {
-                char buffer[c];
+
                 int bytesPrinted = c;
                 while (bytesPrinted > 0) {
-                    readFile = read(STDIN_FILENO, buffer, bytesPrinted);
+                    char buffer[BUFFSIZE] = {};
+                    readFile = read(STDIN_FILENO, buffer, BUFFSIZE);
                     write(STDOUT_FILENO, buffer, bytesPrinted);
                     bytesPrinted = bytesPrinted - readFile;
                 } // while
@@ -101,7 +103,7 @@ int main(int argc, char* argv[]) {
                     perror("read");
                     return EXIT_SUCCESS;
                 } //if
-                printf("\n===>%s<===\n", fileName);
+                printf("\n==>%s<==\n", fileName);
                 write(STDOUT_FILENO, buffer, c);
 
                 } //else
@@ -115,8 +117,8 @@ int main(int argc, char* argv[]) {
             int linesPrinted = 0;
 
             while (linesPrinted < n) {
-                char buffer[BUFFSIZE];
-                char buffer2[BUFFSIZE];
+                char buffer[BUFFSIZE] = {};
+                char buffer2[BUFFSIZE] = {};
 
                 int m = 0;
                 readFile = read(STDIN_FILENO, buffer, BUFFSIZE);
@@ -179,7 +181,7 @@ int main(int argc, char* argv[]) {
                         lineNum++;
                     } //if
                 } //for j
-                printf("\n===>%s<===\n", fileName);
+                printf("\n==>%s<==\n", fileName);
                 //write only buffer2 with the specified number of lines
                 write(STDOUT_FILENO, buffer2, readFile);
 

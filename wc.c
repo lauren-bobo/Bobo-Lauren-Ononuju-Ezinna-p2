@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
         int totalC = 0, totalL = 0, totalW = 0, i = 0, printTotals= false;
         int file = STDIN_FILENO;
         int readFile = 0;
-        char buffer[BUFFSIZE];
+        char buffer[BUFFSIZE] = {};
         int lineNum = 0;
             int wordNum = 0;
             int size = 0;
@@ -116,9 +116,9 @@ int main(int argc, char* argv[]) {
 
         } // if
 
-        char buffer[BUFFSIZE];
+        char buffer[BUFFSIZE] = {};
 
-        int readFile;
+        int readFile = 0;
 
         if (*fileName == '-') {
             int lineNum = 0;
