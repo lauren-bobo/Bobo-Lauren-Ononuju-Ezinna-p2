@@ -1,7 +1,0 @@
-4) stdin needs to be added to all functions
-5) need to parse filenames in ./head and ./tail similarly to how i did in ./wc (ie remove reliance on indexOfStart and instead cycle through optind)
-6) possibly make -c on tail  more efficient (i think read returns num bytes so that could be a condition?)
-7) more error checking and hadnling throughout
-8) fix buffsize
-9) make sure can parse no arguments on wc.c
-10)
