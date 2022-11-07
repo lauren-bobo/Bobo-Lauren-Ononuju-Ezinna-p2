@@ -65,17 +65,15 @@ int main(int argc, char * argv[]) {
                     totalBytes = totalBytes + readFile;
 
                 } //while
-                int  startingPoint = totalBytes - c;
 
-                int i = 0;
+                int i = totalBytes;
 
-                char buffer2[totalBytes];
-                for(i; i < totalBytes; i++) {
-                    if (i > startingPoint) {
-                        buffer2[i] = buffer[i];
-                    } //if
+                char buffer2[c];
+                for(i; i > 0; i--) {
+                    buffer2[i] = buffer[i];
+
                 } //for
-                printf("\n%d\n", startingPoint);
+
                 write(STDOUT_FILENO, buffer2, c);
 
             } else {
